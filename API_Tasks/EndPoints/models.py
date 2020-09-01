@@ -30,6 +30,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    username=models.CharField(verbose_name='username', max_length=255, unique=True, default=None)
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -38,7 +39,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     # Tells Django that the UserManager class defined above should manage
@@ -46,7 +47,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
 
 class UserProfile(models.Model):

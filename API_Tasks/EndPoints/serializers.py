@@ -26,7 +26,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'profile')
+        fields = ('username', 'email', 'password', 'profile')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -40,13 +40,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             age=profile_data['age'],
             gender=profile_data['gender']
         )
-        login_user=authenticate(username=user.get_username(), password=user.password)
+        login_user=authenticate(user=user.username, password=user.password)
         payload=JWT_PAYLOAD_HANDLER(login_user)
         jwt_token=JWT_PAYLOAD_HANDLER(payload)
         update_last_login(None, login_user)
 
         return {
-            'email': login_user.get_username,
+            'username': login_user.username,
             'token': jwt_token,
         }
 
